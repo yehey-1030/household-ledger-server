@@ -1,2 +1,5 @@
 # household-ledger-server
-household-ledger-server
+
+`spring-boot` `java` `MySQL`
+
+

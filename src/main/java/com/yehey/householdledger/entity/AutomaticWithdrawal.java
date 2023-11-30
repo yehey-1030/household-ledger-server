@@ -11,18 +11,18 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ledger")
+@Table(name = "automatic_withdrawal")
 @Builder
-public class Ledger {
+public class AutomaticWithdrawal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ledger_id")
-    private Long ledgerID;
+    @Column(name="id")
+    private Long withdrawalID;
 
-    @Column(name="date")
-    private LocalDate date;
+    @Column(name = "target_date")
+    private LocalDate targetDate;
 
-    @Column(name = "amount")
+    @Column(name="amount")
     private Long amount;
 
     @Column(name = "title")
@@ -33,9 +33,8 @@ public class Ledger {
     private ArchiveType archiveTypeID;
 
     @ManyToMany
-    @JoinTable(name = "ledger_tag_relation",
-    joinColumns = @JoinColumn(name = "ledger_id"),
-    inverseJoinColumns = @JoinColumn(name="tag_id"))
+    @JoinTable(name = "withdrawal_tag_relation",
+            joinColumns = @JoinColumn(name = "withdrawal_id"),
+            inverseJoinColumns = @JoinColumn(name="tag_id"))
     Set<Tag> linkedTags;
-
 }

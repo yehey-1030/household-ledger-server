@@ -5,13 +5,14 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Tag")
+@Table(name = "tag")
 @Builder
 public class Tag {
     @Id
@@ -29,6 +30,15 @@ public class Tag {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentID")
     private List<Tag> children;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "archivetype_id")
+    private ArchiveType archiveTypeID;
+
+    @ManyToMany(mappedBy = "linkedTags")
+    Set<Ledger> usedLedgers;
+
+    @ManyToMany(mappedBy = "linkedTags")
+    Set<Ledger> usedWithdrawal;
 
     public TagDto.Create ToCreateDto(){
         return TagDto.Create.builder()

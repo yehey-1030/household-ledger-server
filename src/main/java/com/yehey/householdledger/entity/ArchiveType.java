@@ -3,6 +3,8 @@ package com.yehey.householdledger.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -19,4 +21,6 @@ public class ArchiveType {
     @Column(name="type_name")
     private String name;
 
+//    @OneToMany(fetch = FetchType.LAZY)
+//    private Set<Tag> tag;
 }

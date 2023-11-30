@@ -1,6 +1,5 @@
 package com.yehey.householdledger.entity;
 
-import com.yehey.householdledger.dto.TagDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +19,7 @@ public class Tag {
     @Column(name = "tag_id")
     private Long tagID;
 
-    @Column(name = "tag_name")
+    @Column(name = "tag_name",nullable = false)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,7 +29,7 @@ public class Tag {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentID")
     private List<Tag> children;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "archivetype_id")
     private ArchiveType archiveTypeID;
 
@@ -40,10 +39,4 @@ public class Tag {
     @ManyToMany(mappedBy = "linkedTags")
     Set<Ledger> usedWithdrawal;
 
-    public TagDto.Create ToCreateDto(){
-        return TagDto.Create.builder()
-//                .tagID(this.tagID)
-                .name(this.name)
-                .build();
-    }
 }

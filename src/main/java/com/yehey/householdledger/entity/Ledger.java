@@ -19,16 +19,16 @@ public class Ledger {
     @Column(name = "ledger_id")
     private Long ledgerID;
 
-    @Column(name="date")
+    @Column(name="date",nullable = false)
     private LocalDate date;
 
-    @Column(name = "amount")
+    @Column(name = "amount",nullable = false)
     private Long amount;
 
-    @Column(name = "title")
+    @Column(name = "title",nullable = false)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "archivetype_id")
     private ArchiveType archiveTypeID;
 

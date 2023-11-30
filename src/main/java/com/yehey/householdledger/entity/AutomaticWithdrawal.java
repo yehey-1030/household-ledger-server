@@ -19,16 +19,16 @@ public class AutomaticWithdrawal {
     @Column(name="id")
     private Long withdrawalID;
 
-    @Column(name = "target_date")
+    @Column(name = "target_date",nullable = false)
     private LocalDate targetDate;
 
-    @Column(name="amount")
+    @Column(name="amount",nullable = false)
     private Long amount;
 
-    @Column(name = "title")
+    @Column(name = "title",nullable = false)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "archivetype_id")
     private ArchiveType archiveTypeID;
 

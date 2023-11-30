@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class PostTagWithParentRequestDTO {
+public class PostTagRequestDTO {
     @JsonProperty("type_id")
     private Long archiveTypeID;
 

@@ -34,9 +34,9 @@ public class Tag {
     private ArchiveType archiveTypeID;
 
     @ManyToMany(mappedBy = "linkedTags")
-    Set<Ledger> usedLedgers;
+    List<Ledger> usedLedgers;
 
     @ManyToMany(mappedBy = "linkedTags")
-    Set<Ledger> usedWithdrawal;
+    List<Ledger> usedWithdrawal;
 
 }

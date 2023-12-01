@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -36,5 +37,5 @@ public class AutomaticWithdrawal {
     @JoinTable(name = "withdrawal_tag_relation",
             joinColumns = @JoinColumn(name = "withdrawal_id"),
             inverseJoinColumns = @JoinColumn(name="tag_id"))
-    Set<Tag> linkedTags;
+    List<Tag> linkedTags;
 }

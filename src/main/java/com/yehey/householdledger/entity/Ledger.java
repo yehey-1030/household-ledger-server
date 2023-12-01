@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -28,6 +29,9 @@ public class Ledger {
     @Column(name = "title",nullable = false)
     private String title;
 
+    @Column(name="memo")
+    private String memo;
+
     @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "archivetype_id")
     private ArchiveType archiveTypeID;
@@ -36,6 +40,6 @@ public class Ledger {
     @JoinTable(name = "ledger_tag_relation",
     joinColumns = @JoinColumn(name = "ledger_id"),
     inverseJoinColumns = @JoinColumn(name="tag_id"))
-    Set<Tag> linkedTags;
+    List<Tag> linkedTags;
 
 }

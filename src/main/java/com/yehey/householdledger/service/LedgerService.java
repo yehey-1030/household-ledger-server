@@ -1,6 +1,9 @@
 package com.yehey.householdledger.service;
 
+import com.yehey.householdledger.dto.ArchiveTypeDTO;
+import com.yehey.householdledger.dto.ledger.LedgerResponseDTO;
 import com.yehey.householdledger.dto.ledger.PostLedgerRequestDTO;
+import com.yehey.householdledger.dto.tag.TagResponseDTO;
 import com.yehey.householdledger.entity.ArchiveType;
 import com.yehey.householdledger.entity.Ledger;
 import com.yehey.householdledger.entity.Tag;
@@ -10,6 +13,7 @@ import com.yehey.householdledger.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -41,4 +45,36 @@ public class LedgerService {
 
     }
 
+    public List<LedgerResponseDTO> getLedgerByMonth(String target){
+        LocalDate start = LocalDate.parse(target+"-01");
+        LocalDate end = start.withDayOfMonth(start.getDayOfMonth());
+
+        List<Ledger> ledgers= ledgerRepository.getAllByDateBetween(start, end);
+        List<LedgerResponseDTO> result = new ArrayList<>();
+
+        for (Ledger ledger:ledgers){
+            List<TagResponseDTO> tagList = new ArrayList<>();
+            for (Tag tag:ledger.getLinkedTags()){
+                TagResponseDTO tagged = TagResponseDTO.builder()
+                        .name(tag.getName())
+                        .tagID(tag.getTagID())
+                        .build();
+                tagList.add(tagged);
+            }
+
+            LedgerResponseDTO dto = LedgerResponseDTO.builder()
+                    .ledgerID(ledger.getLedgerID())
+                    .title(ledger.getTitle())
+                    .date(ledger.getDate())
+                    .amount(ledger.getAmount())
+                    .memo(ledger.getMemo())
+                    .archiveType(ledger.getArchiveTypeID())
+                    .tagList(tagList)
+                    .build();
+
+            result.add(dto);
+        }
+
+        return result;
+    }
 }

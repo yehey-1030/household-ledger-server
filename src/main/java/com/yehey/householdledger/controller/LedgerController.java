@@ -1,16 +1,19 @@
 package com.yehey.householdledger.controller;
 
+import com.yehey.householdledger.dto.ledger.LedgerResponseDTO;
 import com.yehey.householdledger.dto.ledger.PostLedgerRequestDTO;
+import com.yehey.householdledger.dto.response.DataResponseDTO;
 import com.yehey.householdledger.dto.response.ErrorResponseDTO;
 import com.yehey.householdledger.dto.response.ResponseDTO;
 import com.yehey.householdledger.service.LedgerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/api")
@@ -30,6 +33,15 @@ public class LedgerController {
 
             ledgerService.saveLedger(dto);
             return ResponseDTO.of("success",201,"create success");
+    }
+
+    @GetMapping("/ledgers/current")
+    public ResponseDTO getCurrentMonthLedgers(){
+        LocalDate localDateNow = LocalDate.now();
+        String parsedLocalDateTimeNow = localDateNow.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+
+        List<LedgerResponseDTO> ledgerDTO = ledgerService.getLedgerByMonth(parsedLocalDateTimeNow);
+        return DataResponseDTO.of(ledgerDTO,"get current month data success");
     }
 
 }

@@ -32,7 +32,7 @@ public class Ledger {
     @Column(name="memo")
     private String memo;
 
-    @ManyToOne(optional = false,fetch = FetchType.LAZY)
+    @ManyToOne(optional = false,fetch = FetchType.EAGER)
     @JoinColumn(name = "archivetype_id")
     private ArchiveType archiveTypeID;
 

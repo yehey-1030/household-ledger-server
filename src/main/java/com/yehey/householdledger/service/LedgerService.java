@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -46,10 +45,12 @@ public class LedgerService {
     }
 
     public List<LedgerResponseDTO> getLedgerByMonth(String target){
+
         LocalDate start = LocalDate.parse(target+"-01");
-        LocalDate end = start.withDayOfMonth(start.getDayOfMonth());
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
 
         List<Ledger> ledgers= ledgerRepository.getAllByDateBetween(start, end);
+
         List<LedgerResponseDTO> result = new ArrayList<>();
 
         for (Ledger ledger:ledgers){
@@ -76,5 +77,10 @@ public class LedgerService {
         }
 
         return result;
+    }
+
+    public void deleteLedgerByID(Long ledgerID){
+        Ledger ledger = ledgerRepository.getReferenceById(ledgerID);
+
     }
 }

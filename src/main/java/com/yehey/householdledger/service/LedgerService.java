@@ -49,7 +49,7 @@ public class LedgerService {
         LocalDate start = LocalDate.parse(target+"-01");
         LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
 
-        List<Ledger> ledgers= ledgerRepository.getAllByDateBetween(start, end);
+        List<Ledger> ledgers= ledgerRepository.getAllByDateBetweenOrderByDate(start, end);
 
         List<LedgerResponseDTO> result = new ArrayList<>();
 
@@ -81,6 +81,9 @@ public class LedgerService {
 
     public void deleteLedgerByID(Long ledgerID){
         Ledger ledger = ledgerRepository.getReferenceById(ledgerID);
+        ledger.setArchiveTypeID(null);
+        ledger.setLinkedTags(null);
 
+        ledgerRepository.delete(ledger);
     }
 }

@@ -39,6 +39,7 @@ public class TagController {
     public ResponseDTO getAllTypeRootTags(
             @PathVariable(name = "typeID") Long typeID ){
         List<TagResponseDTO> tagList = service.getRootTagsByTypeID(typeID);
+
         return DataResponseDTO.of(tagList,"get type's root tag success");
     }
 

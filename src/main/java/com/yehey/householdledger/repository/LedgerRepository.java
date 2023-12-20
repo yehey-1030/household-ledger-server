@@ -7,6 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface LedgerRepository extends JpaRepository<Ledger,Long> {
-    List<Ledger> getAllByDateBetween(LocalDate start, LocalDate end);
+    List<Ledger> getAllByDateBetweenOrderByDate(LocalDate start, LocalDate end);
 
 }

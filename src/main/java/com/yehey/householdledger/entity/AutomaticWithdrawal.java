@@ -33,9 +33,4 @@ public class AutomaticWithdrawal {
     @JoinColumn(name = "archivetype_id")
     private ArchiveType archiveTypeID;
 
-    @ManyToMany
-    @JoinTable(name = "withdrawal_tag_relation",
-            joinColumns = @JoinColumn(name = "withdrawal_id"),
-            inverseJoinColumns = @JoinColumn(name="tag_id"))
-    List<Tag> linkedTags;
 }

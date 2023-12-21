@@ -7,8 +7,10 @@ import com.yehey.householdledger.dto.tag.TagResponseDTO;
 import com.yehey.householdledger.entity.ArchiveType;
 import com.yehey.householdledger.entity.Ledger;
 import com.yehey.householdledger.entity.Tag;
+import com.yehey.householdledger.entity.TagLedgerRelation;
 import com.yehey.householdledger.repository.ArchiveTypeRepository;
 import com.yehey.householdledger.repository.LedgerRepository;
+import com.yehey.householdledger.repository.TagLedgerRelationRepository;
 import com.yehey.householdledger.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,24 +25,25 @@ public class LedgerService {
     private final TagRepository tagRepository;
     private final ArchiveTypeRepository archiveTypeRepository;
     private final LedgerRepository ledgerRepository;
+    private final TagLedgerRelationRepository tagLedgerRelationRepository;
 
     public void saveLedger(PostLedgerRequestDTO dto){
         ArchiveType archiveType = archiveTypeRepository.findByArchiveTypeID(dto.getTypeID());
-        List<Tag> tagList = new ArrayList<>();
+
+        Ledger newLedger = Ledger.builder()
+                .archiveTypeID(archiveType)
+                .amount(dto.getAmount())
+                .date(dto.getDate())
+                .title(dto.getTitle())
+                .memo(dto.getMemo())
+                .build();
+        ledgerRepository.save(newLedger);
 
         for (Long tagInput: dto.getTagList()){
             Tag tag = tagRepository.findByTagID(tagInput);
-            tagList.add(tag);
-        }
+            tagLedgerRelationRepository.save(TagLedgerRelation.builder().tag(tag).ledger(newLedger).build());
 
-        ledgerRepository.save(Ledger.builder()
-                        .archiveTypeID(archiveType)
-                        .amount(dto.getAmount())
-                        .date(dto.getDate())
-                        .title(dto.getTitle())
-                        .linkedTags(tagList)
-                        .memo(dto.getMemo())
-                        .build());
+        }
 
     }
 
@@ -49,13 +52,14 @@ public class LedgerService {
         LocalDate start = LocalDate.parse(target+"-01");
         LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
 
-        List<Ledger> ledgers= ledgerRepository.getAllByDateBetween(start, end);
+        List<Ledger> ledgers= ledgerRepository.getAllByDateBetweenOrderByDate(start, end);
 
         List<LedgerResponseDTO> result = new ArrayList<>();
 
         for (Ledger ledger:ledgers){
             List<TagResponseDTO> tagList = new ArrayList<>();
-            for (Tag tag:ledger.getLinkedTags()){
+            for (TagLedgerRelation relation:ledger.getRelation()){
+                Tag tag= relation.getTag();
                 TagResponseDTO tagged = TagResponseDTO.builder()
                         .name(tag.getName())
                         .tagID(tag.getTagID())
@@ -81,6 +85,9 @@ public class LedgerService {
 
     public void deleteLedgerByID(Long ledgerID){
         Ledger ledger = ledgerRepository.getReferenceById(ledgerID);
+        ledger.setArchiveTypeID(null);
+        ledger.setRelation(null);
 
+        ledgerRepository.delete(ledger);
     }
 }

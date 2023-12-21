@@ -44,5 +44,12 @@ public class LedgerController {
         return DataResponseDTO.of(ledgerDTO,"get current month data success");
     }
 
+    @DeleteMapping("/ledgers/{ledgerID}")
+    public ResponseDTO deleteLedgerByID(
+            @PathVariable(name = "ledgerID") Long ledgerID) {
+        ledgerService.deleteLedgerByID(ledgerID);
+        return ResponseDTO.of("success",0,"delete "+ledgerID+"successed");
+    }
+
 }
 

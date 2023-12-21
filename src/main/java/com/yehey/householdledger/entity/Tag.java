@@ -33,10 +33,7 @@ public class Tag {
     @JoinColumn(name = "archivetype_id")
     private ArchiveType archiveTypeID;
 
-    @ManyToMany(mappedBy = "linkedTags")
-    List<Ledger> usedLedgers;
-
-    @ManyToMany(mappedBy = "linkedTags")
-    List<Ledger> usedWithdrawal;
+    @OneToMany(mappedBy = "tag")
+    private List<TagLedgerRelation> relation;
 
 }

@@ -36,10 +36,7 @@ public class Ledger {
     @JoinColumn(name = "archivetype_id")
     private ArchiveType archiveTypeID;
 
-    @ManyToMany
-    @JoinTable(name = "ledger_tag_relation",
-    joinColumns = @JoinColumn(name = "ledger_id"),
-    inverseJoinColumns = @JoinColumn(name="tag_id"))
-    List<Tag> linkedTags;
+    @OneToMany(mappedBy = "ledger")
+    List<TagLedgerRelation> relation;
 
 }

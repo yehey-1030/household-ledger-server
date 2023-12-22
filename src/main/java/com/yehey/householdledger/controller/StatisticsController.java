@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,10 +39,18 @@ public class StatisticsController {
         return DataResponseDTO.of(tagStatisticResponseDTOList);
     }
 
+    @GetMapping("/tags/basic")
+    public ResponseDTO getTotalBasicTagReport(
+            StatisticRequestDTO dto
+    ){
+        List<TagStatisticResponseDTO> tagStatisticResponseDTOList = statisticsService.getBasicTagStatistics(dto);
+        return DataResponseDTO.of(tagStatisticResponseDTOList);
+    }
+
     @GetMapping("/tags/{tagID}")
     public ResponseDTO getTagReport(
             StatisticRequestDTO dto,
-            @Param(value = "tagID") Long tagID
+            @PathVariable(value = "tagID") Long tagID
     ){
         TagStatisticResponseDTO tagStatisticResponseDTO = statisticsService.getTagStatistic(dto,tagID);
         return DataResponseDTO.of(tagStatisticResponseDTO);

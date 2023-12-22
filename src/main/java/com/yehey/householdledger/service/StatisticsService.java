@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -26,7 +28,7 @@ public class StatisticsService {
 
     public TotalResponseDTO getTotalAmountByDate(StatisticRequestDTO dto){
         Long totalSum = ledgerRepository.getTotalSumByDateAndArchiveTypeID(dto.getArchiveTypeID(),dto.getStart(),dto.getEnd());
-        return TotalResponseDTO.builder().totalResult(totalSum).build();
+        return TotalResponseDTO.builder().totalAmount(totalSum).build();
     }
 
     public TagStatisticResponseDTO getTagStatistic(StatisticRequestDTO dto, Long tagID){
@@ -49,6 +51,22 @@ public class StatisticsService {
             tagStatisticResponseDTOList.add(getTagStatistic(dto,tag.getTagID()));
         }
 
+        tagStatisticResponseDTOList.sort(Comparator.comparing(TagStatisticResponseDTO::getTotalAmount).reversed());
+        return tagStatisticResponseDTOList;
+    }
+
+    public List<TagStatisticResponseDTO> getBasicTagStatistics(StatisticRequestDTO dto){
+        ArchiveType archiveType = archiveTypeRepository.getByName("기본");
+
+        List<Tag> basicTagList = tagRepository.findAllByArchiveTypeIDAndParentID(archiveType,null);
+
+        List<TagStatisticResponseDTO> tagStatisticResponseDTOList = new ArrayList<>();
+
+        for (Tag tag:basicTagList){
+            tagStatisticResponseDTOList.add(getTagStatistic(dto,tag.getTagID()));
+        }
+
+        tagStatisticResponseDTOList.sort(Comparator.comparing(TagStatisticResponseDTO::getTotalAmount).reversed());
         return tagStatisticResponseDTOList;
     }
 }

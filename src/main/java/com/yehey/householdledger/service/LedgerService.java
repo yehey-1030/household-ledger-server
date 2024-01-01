@@ -1,6 +1,7 @@
 package com.yehey.householdledger.service;
 
 import com.yehey.householdledger.dto.ArchiveTypeDTO;
+import com.yehey.householdledger.dto.ledger.LedgerRequestDTO;
 import com.yehey.householdledger.dto.ledger.LedgerResponseDTO;
 import com.yehey.householdledger.dto.ledger.PostLedgerRequestDTO;
 import com.yehey.householdledger.dto.tag.TagResponseDTO;
@@ -52,7 +53,22 @@ public class LedgerService {
         LocalDate start = LocalDate.parse(target+"-01");
         LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
 
-        List<Ledger> ledgers= ledgerRepository.getAllByDateBetweenOrderByDate(start, end);
+        LedgerRequestDTO dto = new LedgerRequestDTO(start,end);
+
+        return getLedgerListByDate(dto);
+
+    }
+
+    public void deleteLedgerByID(Long ledgerID){
+        Ledger ledger = ledgerRepository.getReferenceById(ledgerID);
+        ledger.setArchiveTypeID(null);
+        ledger.setRelation(null);
+
+        ledgerRepository.delete(ledger);
+    }
+
+    public List<LedgerResponseDTO> getLedgerListByDate(LedgerRequestDTO dto){
+        List<Ledger> ledgers = ledgerRepository.getAllByDateBetweenOrderByDate(dto.getStart(),dto.getEnd());
 
         List<LedgerResponseDTO> result = new ArrayList<>();
 
@@ -67,7 +83,7 @@ public class LedgerService {
                 tagList.add(tagged);
             }
 
-            LedgerResponseDTO dto = LedgerResponseDTO.builder()
+            LedgerResponseDTO responseDTO = LedgerResponseDTO.builder()
                     .ledgerID(ledger.getLedgerID())
                     .title(ledger.getTitle())
                     .date(ledger.getDate())
@@ -77,17 +93,9 @@ public class LedgerService {
                     .tagList(tagList)
                     .build();
 
-            result.add(dto);
+            result.add(responseDTO);
         }
 
         return result;
-    }
-
-    public void deleteLedgerByID(Long ledgerID){
-        Ledger ledger = ledgerRepository.getReferenceById(ledgerID);
-        ledger.setArchiveTypeID(null);
-        ledger.setRelation(null);
-
-        ledgerRepository.delete(ledger);
     }
 }

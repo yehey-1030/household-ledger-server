@@ -1,10 +1,12 @@
 package com.yehey.householdledger.controller;
 
+import com.yehey.householdledger.dto.ledger.LedgerRequestDTO;
 import com.yehey.householdledger.dto.ledger.LedgerResponseDTO;
 import com.yehey.householdledger.dto.ledger.PostLedgerRequestDTO;
 import com.yehey.householdledger.dto.response.DataResponseDTO;
 import com.yehey.householdledger.dto.response.ErrorResponseDTO;
 import com.yehey.householdledger.dto.response.ResponseDTO;
+import com.yehey.householdledger.entity.Ledger;
 import com.yehey.householdledger.service.LedgerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +44,14 @@ public class LedgerController {
 
         List<LedgerResponseDTO> ledgerDTO = ledgerService.getLedgerByMonth(parsedLocalDateTimeNow);
         return DataResponseDTO.of(ledgerDTO,"get current month data success");
+    }
+
+    @GetMapping("/ledgers")
+    public ResponseDTO getLedgerListByDate(
+        LedgerRequestDTO dto
+    ){
+        List<LedgerResponseDTO> ledgerDTO  = ledgerService.getLedgerListByDate(dto);
+        return DataResponseDTO.of(ledgerDTO,"get data success");
     }
 
     @DeleteMapping("/ledgers/{ledgerID}")

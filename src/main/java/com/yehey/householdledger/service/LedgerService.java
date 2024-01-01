@@ -67,21 +67,42 @@ public class LedgerService {
         ledgerRepository.delete(ledger);
     }
 
+    public List<TagResponseDTO> getRelatedTagList(Ledger ledger){
+        List<TagResponseDTO> tagList = new ArrayList<>();
+        for (TagLedgerRelation relation:ledger.getRelation()){
+            Tag tag= relation.getTag();
+            TagResponseDTO tagged = TagResponseDTO.builder()
+                    .name(tag.getName())
+                    .tagID(tag.getTagID())
+                    .build();
+            tagList.add(tagged);
+        }
+        return tagList;
+    }
+
+    public LedgerResponseDTO getLedgerByID(Long ledgerID){
+        Ledger ledger = ledgerRepository.getReferenceById(ledgerID);
+
+        List<TagResponseDTO> tagResponseDTOList = getRelatedTagList(ledger);
+
+        return LedgerResponseDTO.builder()
+                .ledgerID(ledger.getLedgerID())
+                .title(ledger.getTitle())
+                .date(ledger.getDate())
+                .amount(ledger.getAmount())
+                .memo(ledger.getMemo())
+                .tagList(tagResponseDTOList)
+        .build();
+
+    }
+
     public List<LedgerResponseDTO> getLedgerListByDate(LedgerRequestDTO dto){
         List<Ledger> ledgers = ledgerRepository.getAllByDateBetweenOrderByDate(dto.getStart(),dto.getEnd());
 
         List<LedgerResponseDTO> result = new ArrayList<>();
 
         for (Ledger ledger:ledgers){
-            List<TagResponseDTO> tagList = new ArrayList<>();
-            for (TagLedgerRelation relation:ledger.getRelation()){
-                Tag tag= relation.getTag();
-                TagResponseDTO tagged = TagResponseDTO.builder()
-                        .name(tag.getName())
-                        .tagID(tag.getTagID())
-                        .build();
-                tagList.add(tagged);
-            }
+            List<TagResponseDTO> tagList = getRelatedTagList(ledger);
 
             LedgerResponseDTO responseDTO = LedgerResponseDTO.builder()
                     .ledgerID(ledger.getLedgerID())

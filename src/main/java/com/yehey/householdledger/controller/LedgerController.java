@@ -54,6 +54,14 @@ public class LedgerController {
         return DataResponseDTO.of(ledgerDTO,"get data success");
     }
 
+    @GetMapping("/ledgers/{ledgerID}")
+    public ResponseDTO getLedgerByID(
+            @PathVariable(name = "ledgerID") Long ledgerID
+    ){
+        LedgerResponseDTO responseDTO = ledgerService.getLedgerByID(ledgerID);
+        return DataResponseDTO.of(responseDTO);
+    }
+
     @DeleteMapping("/ledgers/{ledgerID}")
     public ResponseDTO deleteLedgerByID(
             @PathVariable(name = "ledgerID") Long ledgerID) {

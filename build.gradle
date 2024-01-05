@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.yehey'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.1'
 
 java {
 	sourceCompatibility = '21'
@@ -32,5 +32,5 @@ dependencies {
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+//	useJUnitPlatform()
 }

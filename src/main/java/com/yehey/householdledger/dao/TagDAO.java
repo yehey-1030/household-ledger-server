@@ -17,7 +17,6 @@ public class TagDAO {
     }
 
     public Tag createTag(Tag entity){
-        log.warn(entity.toString());
         return this.repository.save(entity);
     }
 }

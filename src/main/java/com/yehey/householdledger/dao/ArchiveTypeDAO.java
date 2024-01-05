@@ -19,7 +19,6 @@ public class ArchiveTypeDAO {
     }
 
     public ArchiveType CreateType(ArchiveType entity){
-        log.warn(entity.toString());
         return this.repository.save(entity);
     }
 }

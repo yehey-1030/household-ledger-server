@@ -92,6 +92,7 @@ public class LedgerService {
                 .amount(ledger.getAmount())
                 .memo(ledger.getMemo())
                 .tagList(tagResponseDTOList)
+                .archiveType(ledger.getArchiveTypeID())
         .build();
 
     }

@@ -1,11 +1,12 @@
 package com.yehey.householdledger.entity;
 
+import com.yehey.householdledger.utils.converter.ExcludedAttributeConverter;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -38,5 +39,10 @@ public class Ledger {
 
     @OneToMany(mappedBy = "ledger")
     List<TagLedgerRelation> relation;
+
+    @Column(name="is_excluded",nullable = false,columnDefinition = "TINYINT",length = 1)
+    @Convert(converter = ExcludedAttributeConverter.class)
+    @ColumnDefault("0")
+    private Boolean isExcluded;
 
 }

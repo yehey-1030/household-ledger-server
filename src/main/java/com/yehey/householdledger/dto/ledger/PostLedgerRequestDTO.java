@@ -17,4 +17,5 @@ public class PostLedgerRequestDTO {
     private LocalDate date;
     private List<Long> tagList;
     private String memo;
+    private Boolean isExcluded;
 }

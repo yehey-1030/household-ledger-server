@@ -18,4 +18,5 @@ public class LedgerResponseDTO {
     private String memo;
     private ArchiveType archiveType;
     private List<TagResponseDTO> tagList;
+    private Boolean isExcluded;
 }

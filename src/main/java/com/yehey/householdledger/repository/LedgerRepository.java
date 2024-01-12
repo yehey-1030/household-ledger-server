@@ -16,4 +16,10 @@ public interface LedgerRepository extends JpaRepository<Ledger,Long> {
     @Query(value = "select COALESCE(sum(l.amount),0) as total from Ledger l where l.archiveTypeID.archiveTypeID=:archiveTypeID and l.date>=:start and l.date<=:end")
     Long getTotalSumByDateAndArchiveTypeID(@Param(value = "archiveTypeID")Long archiveTypeID,@Param(value="start") LocalDate start, @Param(value = "end") LocalDate end);
 
+    @Query(value = "select coalesce(sum(l.amount),0) from Ledger l where l.date>=:start and l.date<=:end and l.archiveTypeID.archiveTypeID=:archiveTypeID and l.isExcluded=true")
+    Long getExcludedTotalSum(@Param(value="start") LocalDate start, @Param(value = "end") LocalDate end,@Param(value = "archiveTypeID")Long archiveTypeID);
+
+    @Query(value = "select l.ledgerID from Ledger l where l.date>=:start and l.date<=:end and l.archiveTypeID.archiveTypeID=:archiveTypeID and l.isExcluded=true order by l.date,l.ledgerID")
+    List<Long> getExcludedLedgerList(@Param(value="start") LocalDate start, @Param(value = "end") LocalDate end,@Param(value = "archiveTypeID")Long archiveTypeID);
+
 }

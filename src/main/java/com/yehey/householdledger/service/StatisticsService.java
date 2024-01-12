@@ -1,5 +1,6 @@
 package com.yehey.householdledger.service;
 
+import com.yehey.householdledger.dto.statistics.ExcludedResponseDTO;
 import com.yehey.householdledger.dto.statistics.StatisticRequestDTO;
 import com.yehey.householdledger.dto.statistics.TagStatisticResponseDTO;
 import com.yehey.householdledger.dto.statistics.TotalResponseDTO;
@@ -68,5 +69,13 @@ public class StatisticsService {
 
         tagStatisticResponseDTOList.sort(Comparator.comparing(TagStatisticResponseDTO::getTotalAmount).reversed());
         return tagStatisticResponseDTOList;
+    }
+
+    public ExcludedResponseDTO getExcludedStatistics(StatisticRequestDTO dto){
+        Long totalSum = ledgerRepository.getExcludedTotalSum(dto.getStart(),dto.getEnd(), dto.getArchiveTypeID());
+
+        List<Long> excludedList = ledgerRepository.getExcludedLedgerList(dto.getStart(),dto.getEnd(), dto.getArchiveTypeID());
+
+        return ExcludedResponseDTO.builder().total(totalSum).ledgerList(excludedList).build();
     }
 }

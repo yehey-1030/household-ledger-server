@@ -3,6 +3,7 @@ package com.yehey.householdledger.controller;
 import com.yehey.householdledger.dto.ledger.LedgerRequestDTO;
 import com.yehey.householdledger.dto.ledger.LedgerResponseDTO;
 import com.yehey.householdledger.dto.ledger.PostLedgerRequestDTO;
+import com.yehey.householdledger.dto.ledger.UpdateLedgerRequestDTO;
 import com.yehey.householdledger.dto.response.DataResponseDTO;
 import com.yehey.householdledger.dto.response.ErrorResponseDTO;
 import com.yehey.householdledger.dto.response.ResponseDTO;
@@ -10,6 +11,7 @@ import com.yehey.householdledger.entity.Ledger;
 import com.yehey.householdledger.service.LedgerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.sql.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,8 +60,12 @@ public class LedgerController {
     public ResponseDTO getLedgerByID(
             @PathVariable(name = "ledgerID") Long ledgerID
     ){
-        LedgerResponseDTO responseDTO = ledgerService.getLedgerByID(ledgerID);
-        return DataResponseDTO.of(responseDTO);
+        try {
+            LedgerResponseDTO responseDTO = ledgerService.getLedgerByID(ledgerID);
+            return DataResponseDTO.of(responseDTO);
+        }catch (Exception e){
+            return ErrorResponseDTO.of(404,"ledger not found");
+        }
     }
 
     @DeleteMapping("/ledgers/{ledgerID}")
@@ -67,6 +73,22 @@ public class LedgerController {
             @PathVariable(name = "ledgerID") Long ledgerID) {
         ledgerService.deleteLedgerByID(ledgerID);
         return ResponseDTO.of("success",0,"delete "+ledgerID+"successed");
+    }
+
+    @PutMapping("/ledgers")
+    public ResponseDTO updateLedgerByID(
+            @RequestBody UpdateLedgerRequestDTO dto
+            ){
+        if (dto.getLedgerID()==null){
+            return ErrorResponseDTO.of(400,"bad request");
+        }
+        try {
+            ledgerService.updateLedgerByID(dto);
+            return ResponseDTO.of("success",201,"update success");
+        }catch (Exception e){
+            return ErrorResponseDTO.of(500,"internal server error");
+        }
+
     }
 
 }

@@ -4,6 +4,7 @@ import com.yehey.householdledger.dto.ArchiveTypeDTO;
 import com.yehey.householdledger.dto.ledger.LedgerRequestDTO;
 import com.yehey.householdledger.dto.ledger.LedgerResponseDTO;
 import com.yehey.householdledger.dto.ledger.PostLedgerRequestDTO;
+import com.yehey.householdledger.dto.ledger.UpdateLedgerRequestDTO;
 import com.yehey.householdledger.dto.tag.TagResponseDTO;
 import com.yehey.householdledger.entity.ArchiveType;
 import com.yehey.householdledger.entity.Ledger;
@@ -13,6 +14,7 @@ import com.yehey.householdledger.repository.ArchiveTypeRepository;
 import com.yehey.householdledger.repository.LedgerRepository;
 import com.yehey.householdledger.repository.TagLedgerRelationRepository;
 import com.yehey.householdledger.repository.TagRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,13 +39,13 @@ public class LedgerService {
                 .date(dto.getDate())
                 .title(dto.getTitle())
                 .memo(dto.getMemo())
+                .isExcluded(dto.getIsExcluded())
                 .build();
         ledgerRepository.save(newLedger);
 
         for (Long tagInput: dto.getTagList()){
             Tag tag = tagRepository.findByTagID(tagInput);
             tagLedgerRelationRepository.save(TagLedgerRelation.builder().tag(tag).ledger(newLedger).build());
-
         }
 
     }
@@ -61,6 +63,9 @@ public class LedgerService {
 
     public void deleteLedgerByID(Long ledgerID){
         Ledger ledger = ledgerRepository.getReferenceById(ledgerID);
+
+        tagLedgerRelationRepository.deleteAll(ledger.getRelation());
+
         ledger.setArchiveTypeID(null);
         ledger.setRelation(null);
 
@@ -83,6 +88,7 @@ public class LedgerService {
     public LedgerResponseDTO getLedgerByID(Long ledgerID){
         Ledger ledger = ledgerRepository.getReferenceById(ledgerID);
 
+
         List<TagResponseDTO> tagResponseDTOList = getRelatedTagList(ledger);
 
         return LedgerResponseDTO.builder()
@@ -92,6 +98,8 @@ public class LedgerService {
                 .amount(ledger.getAmount())
                 .memo(ledger.getMemo())
                 .tagList(tagResponseDTOList)
+                .isExcluded(ledger.getIsExcluded())
+                .archiveType(ledger.getArchiveTypeID())
         .build();
 
     }
@@ -112,11 +120,32 @@ public class LedgerService {
                     .memo(ledger.getMemo())
                     .archiveType(ledger.getArchiveTypeID())
                     .tagList(tagList)
+                    .isExcluded(ledger.getIsExcluded())
                     .build();
 
             result.add(responseDTO);
         }
 
         return result;
+    }
+
+    @Transactional
+    public void updateLedgerByID(UpdateLedgerRequestDTO dto){
+        Ledger ledger = ledgerRepository.findById(dto.getLedgerID()).orElseThrow();
+        ArchiveType archiveType = archiveTypeRepository.findByArchiveTypeID(dto.getTypeID());
+
+        tagLedgerRelationRepository.deleteAll(ledger.getRelation());
+
+        for (Long tagInput: dto.getTagList()){
+            Tag tag = tagRepository.findByTagID(tagInput);
+            tagLedgerRelationRepository.save(TagLedgerRelation.builder().tag(tag).ledger(ledger).build());
+        }
+
+        ledger.setDate(dto.getDate());
+        ledger.setAmount(dto.getAmount());
+        ledger.setTitle(dto.getTitle());
+        ledger.setMemo(dto.getMemo());
+        ledger.setIsExcluded(dto.getIsExcluded());
+        ledger.setArchiveTypeID(archiveType);
     }
 }

@@ -2,6 +2,7 @@ package com.yehey.householdledger.controller;
 
 import com.yehey.householdledger.dto.response.DataResponseDTO;
 import com.yehey.householdledger.dto.response.ResponseDTO;
+import com.yehey.householdledger.dto.statistics.ExcludedResponseDTO;
 import com.yehey.householdledger.dto.statistics.StatisticRequestDTO;
 import com.yehey.householdledger.dto.statistics.TagStatisticResponseDTO;
 import com.yehey.householdledger.dto.statistics.TotalResponseDTO;
@@ -56,4 +57,11 @@ public class StatisticsController {
         return DataResponseDTO.of(tagStatisticResponseDTO);
     }
 
+    @GetMapping("/excluded")
+    public ResponseDTO getTagReport(
+            StatisticRequestDTO dto
+    ){
+        ExcludedResponseDTO excludedResponseDTO = statisticsService.getExcludedStatistics(dto);
+        return DataResponseDTO.of(excludedResponseDTO);
+    }
 }

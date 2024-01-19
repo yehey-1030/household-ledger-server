@@ -1,7 +1,9 @@
 package com.yehey.householdledger.entity;
 
+import com.yehey.householdledger.utils.converter.ExcludedAttributeConverter;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,11 +19,11 @@ import java.util.Set;
 public class AutomaticWithdrawal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name="withdrawal_id")
     private Long withdrawalID;
 
-    @Column(name = "target_date",nullable = false)
-    private LocalDate targetDate;
+    @Column(name = "cycle",nullable = false)
+    private String cycle;
 
     @Column(name="amount",nullable = false)
     private Long amount;
@@ -33,4 +35,14 @@ public class AutomaticWithdrawal {
     @JoinColumn(name = "archivetype_id")
     private ArchiveType archiveTypeID;
 
+    @Column(name="memo")
+    private String memo;
+
+    @Column(name="is_excluded",nullable = false,columnDefinition = "TINYINT",length = 1)
+    @Convert(converter = ExcludedAttributeConverter.class)
+    @ColumnDefault("0")
+    private Boolean isExcluded;
+
+    @OneToMany(mappedBy = "withdrawal")
+    List<WithdrawalTagRelation> relation;
 }

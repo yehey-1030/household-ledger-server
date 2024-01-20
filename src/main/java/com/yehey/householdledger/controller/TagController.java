@@ -16,39 +16,40 @@ import java.util.List;
 @RequestMapping("/v1/api")
 @Slf4j
 public class TagController {
-    private final TagService service;
 
-    @Autowired
-    public TagController(TagService service) {
-        this.service = service;
+  private final TagService service;
+
+  @Autowired
+  public TagController(TagService service) {
+    this.service = service;
+  }
+
+  @PostMapping("/tags")
+  public ResponseEntity<?> postTagWithParent(
+      @RequestBody PostTagRequestDTO dto
+  ) {
+    if (dto.getParentID() != null) {
+      service.saveTagWithParent(dto);
+    } else {
+      service.saveTagExceptParent(dto);
     }
+    return ResponseEntity.status(201).body("success");
+  }
 
-    @PostMapping("/tags")
-    public ResponseEntity<?> postTagWithParent(
-            @RequestBody PostTagRequestDTO dto
-            ){
-        if (dto.getParentID()!=null){
-            service.saveTagWithParent(dto);
-        }else{
-            service.saveTagExceptParent(dto);
-        }
-        return ResponseEntity.status(201).body("success");
-    }
+  @GetMapping("/archive-types/{typeID}")
+  public ResponseDTO getAllTypeRootTags(
+      @PathVariable(name = "typeID") Long typeID) {
+    List<TagResponseDTO> tagList = service.getRootTagsByTypeID(typeID);
 
-    @GetMapping("/archive-types/{typeID}")
-    public ResponseDTO getAllTypeRootTags(
-            @PathVariable(name = "typeID") Long typeID ){
-        List<TagResponseDTO> tagList = service.getRootTagsByTypeID(typeID);
+    return DataResponseDTO.of(tagList, "get type's root tag success");
+  }
 
-        return DataResponseDTO.of(tagList,"get type's root tag success");
-    }
+  @GetMapping("/tags/{parentTagID}")
+  public ResponseDTO getAllChildTags(
+      @PathVariable(name = "parentTagID") Long parentTagID
+  ) {
+    List<TagResponseDTO> tagList = service.getChildTagsByParentID(parentTagID);
+    return DataResponseDTO.of(tagList, "get parent's child tags success");
 
-    @GetMapping("/tags/{parentTagID}")
-    public ResponseDTO getAllChildTags(
-            @PathVariable(name="parentTagID") Long parentTagID
-    ){
-        List<TagResponseDTO> tagList = service.getChildTagsByParentID(parentTagID);
-        return DataResponseDTO.of(tagList,"get parent's child tags success");
-
-    }
+  }
 }

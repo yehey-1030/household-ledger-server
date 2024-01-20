@@ -7,24 +7,26 @@ import lombok.Getter;
 import lombok.ToString;
 
 public class ArchiveTypeDTO {
-    @Getter
-    @ToString
-    @Builder
-    public static class CreateType {
 
-        @JsonProperty("type_name")
-        private String name;
+  @Getter
+  @ToString
+  @Builder
+  public static class CreateType {
 
-        public CreateType(String name){
-            this.name=name;
-        }
+    @JsonProperty("type_name")
+    private String name;
 
-        public CreateType(){}
-
-        public ArchiveType ToEntity(){
-            return ArchiveType.builder()
-                    .name(this.name)
-                    .build();
-        }
+    public CreateType(String name) {
+      this.name = name;
     }
+
+    public CreateType() {
+    }
+
+    public ArchiveType ToEntity() {
+      return ArchiveType.builder()
+          .name(this.name)
+          .build();
+    }
+  }
 }

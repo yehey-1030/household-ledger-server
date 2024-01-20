@@ -22,60 +22,69 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class StatisticsService {
-    private final LedgerRepository ledgerRepository;
-    private final ArchiveTypeRepository archiveTypeRepository;
-    private final TagRepository tagRepository;
-    private final TagLedgerRelationRepository tagLedgerRelationRepository;
 
-    public TotalResponseDTO getTotalAmountByDate(StatisticRequestDTO dto){
-        Long totalSum = ledgerRepository.getTotalSumByDateAndArchiveTypeID(dto.getArchiveTypeID(),dto.getStart(),dto.getEnd());
-        return TotalResponseDTO.builder().totalAmount(totalSum).build();
+  private final LedgerRepository ledgerRepository;
+  private final ArchiveTypeRepository archiveTypeRepository;
+  private final TagRepository tagRepository;
+  private final TagLedgerRelationRepository tagLedgerRelationRepository;
+
+  public TotalResponseDTO getTotalAmountByDate(StatisticRequestDTO dto) {
+    Long totalSum = ledgerRepository.getTotalSumByDateAndArchiveTypeID(dto.getArchiveTypeID(),
+        dto.getStart(), dto.getEnd());
+    return TotalResponseDTO.builder().totalAmount(totalSum).build();
+  }
+
+  public TagStatisticResponseDTO getTagStatistic(StatisticRequestDTO dto, Long tagID) {
+    Tag tag = tagRepository.findByTagID(tagID);
+    Long totalSum = tagLedgerRelationRepository.getTotalSumByTagAndDate(tagID, dto.getStart(),
+        dto.getEnd(), dto.getArchiveTypeID());
+
+    List<Long> ledgerList = tagLedgerRelationRepository.getLedgerListByTagAndDate(tagID,
+        dto.getStart(), dto.getEnd(), dto.getArchiveTypeID());
+
+    return TagStatisticResponseDTO.builder().totalAmount(totalSum).tagName(tag.getName())
+        .ledgerList(ledgerList).tagID(tag.getTagID()).build();
+  }
+
+  public List<TagStatisticResponseDTO> getRootTagStatistics(StatisticRequestDTO dto) {
+    ArchiveType archiveType = archiveTypeRepository.findByArchiveTypeID(dto.getArchiveTypeID());
+
+    List<Tag> rootTagList = tagRepository.findAllByArchiveTypeIDAndParentID(archiveType, null);
+
+    List<TagStatisticResponseDTO> tagStatisticResponseDTOList = new ArrayList<>();
+
+    for (Tag tag : rootTagList) {
+      tagStatisticResponseDTOList.add(getTagStatistic(dto, tag.getTagID()));
     }
 
-    public TagStatisticResponseDTO getTagStatistic(StatisticRequestDTO dto, Long tagID){
-        Tag tag = tagRepository.findByTagID(tagID);
-        Long totalSum = tagLedgerRelationRepository.getTotalSumByTagAndDate(tagID,dto.getStart(),dto.getEnd(),dto.getArchiveTypeID());
+    tagStatisticResponseDTOList.sort(
+        Comparator.comparing(TagStatisticResponseDTO::getTotalAmount).reversed());
+    return tagStatisticResponseDTOList;
+  }
 
-        List<Long> ledgerList = tagLedgerRelationRepository.getLedgerListByTagAndDate(tagID,dto.getStart(),dto.getEnd(),dto.getArchiveTypeID());
+  public List<TagStatisticResponseDTO> getBasicTagStatistics(StatisticRequestDTO dto) {
+    ArchiveType archiveType = archiveTypeRepository.getByName("기본");
 
-        return TagStatisticResponseDTO.builder().totalAmount(totalSum).tagName(tag.getName()).ledgerList(ledgerList).tagID(tag.getTagID()).build();
+    List<Tag> basicTagList = tagRepository.findAllByArchiveTypeIDAndParentID(archiveType, null);
+
+    List<TagStatisticResponseDTO> tagStatisticResponseDTOList = new ArrayList<>();
+
+    for (Tag tag : basicTagList) {
+      tagStatisticResponseDTOList.add(getTagStatistic(dto, tag.getTagID()));
     }
 
-    public List<TagStatisticResponseDTO> getRootTagStatistics(StatisticRequestDTO dto){
-        ArchiveType archiveType = archiveTypeRepository.findByArchiveTypeID(dto.getArchiveTypeID());
+    tagStatisticResponseDTOList.sort(
+        Comparator.comparing(TagStatisticResponseDTO::getTotalAmount).reversed());
+    return tagStatisticResponseDTOList;
+  }
 
-        List<Tag> rootTagList = tagRepository.findAllByArchiveTypeIDAndParentID(archiveType,null);
+  public ExcludedResponseDTO getExcludedStatistics(StatisticRequestDTO dto) {
+    Long totalSum = ledgerRepository.getExcludedTotalSum(dto.getStart(), dto.getEnd(),
+        dto.getArchiveTypeID());
 
-        List<TagStatisticResponseDTO> tagStatisticResponseDTOList = new ArrayList<>();
+    List<Long> excludedList = ledgerRepository.getExcludedLedgerList(dto.getStart(), dto.getEnd(),
+        dto.getArchiveTypeID());
 
-        for (Tag tag:rootTagList){
-            tagStatisticResponseDTOList.add(getTagStatistic(dto,tag.getTagID()));
-        }
-
-        tagStatisticResponseDTOList.sort(Comparator.comparing(TagStatisticResponseDTO::getTotalAmount).reversed());
-        return tagStatisticResponseDTOList;
-    }
-
-    public List<TagStatisticResponseDTO> getBasicTagStatistics(StatisticRequestDTO dto){
-        ArchiveType archiveType = archiveTypeRepository.getByName("기본");
-
-        List<Tag> basicTagList = tagRepository.findAllByArchiveTypeIDAndParentID(archiveType,null);
-
-        List<TagStatisticResponseDTO> tagStatisticResponseDTOList = new ArrayList<>();
-
-        for (Tag tag:basicTagList){
-            tagStatisticResponseDTOList.add(getTagStatistic(dto,tag.getTagID()));
-        }
-
-        tagStatisticResponseDTOList.sort(Comparator.comparing(TagStatisticResponseDTO::getTotalAmount).reversed());
-        return tagStatisticResponseDTOList;
-    }
-
-    public ExcludedResponseDTO getExcludedStatistics(StatisticRequestDTO dto){
-        Long totalSum = ledgerRepository.getExcludedTotalSum(dto.getStart(),dto.getEnd(), dto.getArchiveTypeID());
-
-        List<Long> excludedList = ledgerRepository.getExcludedLedgerList(dto.getStart(),dto.getEnd(), dto.getArchiveTypeID());
-
-        return ExcludedResponseDTO.builder().total(totalSum).ledgerList(excludedList).build();
-    }
+    return ExcludedResponseDTO.builder().total(totalSum).ledgerList(excludedList).build();
+  }
 }

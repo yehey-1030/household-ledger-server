@@ -9,9 +9,10 @@ import java.time.LocalDate;
 @Getter
 @RequiredArgsConstructor
 public class StatisticRequestDTO {
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",timezone = "Asia/Seoul")
-    private final LocalDate start;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",timezone = "Asia/Seoul")
-    private final LocalDate end;
-    private final Long archiveTypeID;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+  private final LocalDate start;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+  private final LocalDate end;
+  private final Long archiveTypeID;
 }

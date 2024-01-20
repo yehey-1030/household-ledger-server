@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class HouseholdLedgerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(HouseholdLedgerApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(HouseholdLedgerApplication.class, args);
+  }
 
 }

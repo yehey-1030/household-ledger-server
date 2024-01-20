@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Builder
 public class ExcludedResponseDTO {
-    private final List<Long> ledgerList;
-    private final Long total;
+
+  private final List<Long> ledgerList;
+  private final Long total;
 }

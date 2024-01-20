@@ -11,14 +11,15 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class ArchiveTypeDAO {
-    private final ArchiveTypeRepository repository;
 
-    @Autowired
-    public ArchiveTypeDAO(ArchiveTypeRepository repository){
-        this.repository = repository;
-    }
+  private final ArchiveTypeRepository repository;
 
-    public ArchiveType CreateType(ArchiveType entity){
-        return this.repository.save(entity);
-    }
+  @Autowired
+  public ArchiveTypeDAO(ArchiveTypeRepository repository) {
+    this.repository = repository;
+  }
+
+  public ArchiveType CreateType(ArchiveType entity) {
+    return this.repository.save(entity);
+  }
 }

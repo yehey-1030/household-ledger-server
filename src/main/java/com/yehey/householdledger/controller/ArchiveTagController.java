@@ -15,24 +15,25 @@ import java.util.List;
 @RequestMapping("/v1/api/archive-types")
 @Slf4j
 public class ArchiveTagController {
-    private final ArchiveTypeService service;
 
-    @Autowired
-    public ArchiveTagController(ArchiveTypeService service){
-        this.service = service;
-    }
+  private final ArchiveTypeService service;
 
-    @PostMapping("/type")
-    public ArchiveTypeDTO.CreateType postArchiveType(
-            @RequestBody ArchiveTypeDTO.CreateType dto
-    ){
-        log.warn(dto.toString());
-        return this.service.CreateType(dto);
-    }
+  @Autowired
+  public ArchiveTagController(ArchiveTypeService service) {
+    this.service = service;
+  }
 
-    @GetMapping("")
-    public ResponseDTO getAllArchiveTypes(){
-        List<ArchiveType> typeList = service.getAllType();
-        return DataResponseDTO.of(typeList,"get all types success");
-    }
+  @PostMapping("/type")
+  public ArchiveTypeDTO.CreateType postArchiveType(
+      @RequestBody ArchiveTypeDTO.CreateType dto
+  ) {
+    log.warn(dto.toString());
+    return this.service.CreateType(dto);
+  }
+
+  @GetMapping("")
+  public ResponseDTO getAllArchiveTypes() {
+    List<ArchiveType> typeList = service.getAllType();
+    return DataResponseDTO.of(typeList, "get all types success");
+  }
 }

@@ -22,46 +22,51 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class StatisticsController {
-    private final StatisticsService statisticsService;
 
-    @GetMapping("/total")
-    public ResponseDTO getTotalReport(
-            StatisticRequestDTO dto
-    ){
-        TotalResponseDTO totalResponseDTO = statisticsService.getTotalAmountByDate(dto);
-        return DataResponseDTO.of(totalResponseDTO,dto.getArchiveTypeID()+"total amount get successed from "+dto.getStart()+" to "+dto.getEnd());
-    }
+  private final StatisticsService statisticsService;
 
-    @GetMapping("/tags")
-    public ResponseDTO getTotalRootTagReport(
-            StatisticRequestDTO dto
-    ){
-        List<TagStatisticResponseDTO> tagStatisticResponseDTOList = statisticsService.getRootTagStatistics(dto);
-        return DataResponseDTO.of(tagStatisticResponseDTOList);
-    }
+  @GetMapping("/total")
+  public ResponseDTO getTotalReport(
+      StatisticRequestDTO dto
+  ) {
+    TotalResponseDTO totalResponseDTO = statisticsService.getTotalAmountByDate(dto);
+    return DataResponseDTO.of(totalResponseDTO,
+        dto.getArchiveTypeID() + "total amount get successed from " + dto.getStart() + " to "
+            + dto.getEnd());
+  }
 
-    @GetMapping("/tags/basic")
-    public ResponseDTO getTotalBasicTagReport(
-            StatisticRequestDTO dto
-    ){
-        List<TagStatisticResponseDTO> tagStatisticResponseDTOList = statisticsService.getBasicTagStatistics(dto);
-        return DataResponseDTO.of(tagStatisticResponseDTOList);
-    }
+  @GetMapping("/tags")
+  public ResponseDTO getTotalRootTagReport(
+      StatisticRequestDTO dto
+  ) {
+    List<TagStatisticResponseDTO> tagStatisticResponseDTOList = statisticsService.getRootTagStatistics(
+        dto);
+    return DataResponseDTO.of(tagStatisticResponseDTOList);
+  }
 
-    @GetMapping("/tags/{tagID}")
-    public ResponseDTO getTagReport(
-            StatisticRequestDTO dto,
-            @PathVariable(value = "tagID") Long tagID
-    ){
-        TagStatisticResponseDTO tagStatisticResponseDTO = statisticsService.getTagStatistic(dto,tagID);
-        return DataResponseDTO.of(tagStatisticResponseDTO);
-    }
+  @GetMapping("/tags/basic")
+  public ResponseDTO getTotalBasicTagReport(
+      StatisticRequestDTO dto
+  ) {
+    List<TagStatisticResponseDTO> tagStatisticResponseDTOList = statisticsService.getBasicTagStatistics(
+        dto);
+    return DataResponseDTO.of(tagStatisticResponseDTOList);
+  }
 
-    @GetMapping("/excluded")
-    public ResponseDTO getTagReport(
-            StatisticRequestDTO dto
-    ){
-        ExcludedResponseDTO excludedResponseDTO = statisticsService.getExcludedStatistics(dto);
-        return DataResponseDTO.of(excludedResponseDTO);
-    }
+  @GetMapping("/tags/{tagID}")
+  public ResponseDTO getTagReport(
+      StatisticRequestDTO dto,
+      @PathVariable(value = "tagID") Long tagID
+  ) {
+    TagStatisticResponseDTO tagStatisticResponseDTO = statisticsService.getTagStatistic(dto, tagID);
+    return DataResponseDTO.of(tagStatisticResponseDTO);
+  }
+
+  @GetMapping("/excluded")
+  public ResponseDTO getTagReport(
+      StatisticRequestDTO dto
+  ) {
+    ExcludedResponseDTO excludedResponseDTO = statisticsService.getExcludedStatistics(dto);
+    return DataResponseDTO.of(excludedResponseDTO);
+  }
 }

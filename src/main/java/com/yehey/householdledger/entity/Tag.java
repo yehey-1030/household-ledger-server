@@ -14,26 +14,27 @@ import java.util.Set;
 @Table(name = "tag")
 @Builder
 public class Tag {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tag_id")
-    private Long tagID;
 
-    @Column(name = "tag_name",nullable = false)
-    private String name;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "tag_id")
+  private Long tagID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Tag parentID;
+  @Column(name = "tag_name", nullable = false)
+  private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentID")
-    private List<Tag> children;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "parent_id")
+  private Tag parentID;
 
-    @ManyToOne(optional = false,fetch = FetchType.LAZY)
-    @JoinColumn(name = "archivetype_id")
-    private ArchiveType archiveTypeID;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentID")
+  private List<Tag> children;
 
-    @OneToMany(mappedBy = "tag")
-    private List<TagLedgerRelation> relation;
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "archivetype_id")
+  private ArchiveType archiveTypeID;
+
+  @OneToMany(mappedBy = "tag")
+  private List<TagLedgerRelation> relation;
 
 }

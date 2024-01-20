@@ -11,8 +11,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Builder
 public class TagStatisticResponseDTO {
-    private final String tagName;
-    private final Long tagID;
-    private final Long totalAmount;
-    private final List<Long> ledgerList;
+
+  private final String tagName;
+  private final Long tagID;
+  private final Long totalAmount;
+  private final List<Long> ledgerList;
 }

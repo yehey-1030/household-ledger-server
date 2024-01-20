@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class TotalResponseDTO {
-    private final Long totalAmount;
+
+  private final Long totalAmount;
 }
 

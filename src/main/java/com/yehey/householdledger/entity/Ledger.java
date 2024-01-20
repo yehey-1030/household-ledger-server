@@ -16,33 +16,34 @@ import java.util.List;
 @Table(name = "ledger")
 @Builder
 public class Ledger {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ledger_id")
-    private Long ledgerID;
 
-    @Column(name="date",nullable = false)
-    private LocalDate date;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ledger_id")
+  private Long ledgerID;
 
-    @Column(name = "amount",nullable = false)
-    private Long amount;
+  @Column(name = "date", nullable = false)
+  private LocalDate date;
 
-    @Column(name = "title",nullable = false)
-    private String title;
+  @Column(name = "amount", nullable = false)
+  private Long amount;
 
-    @Column(name="memo")
-    private String memo;
+  @Column(name = "title", nullable = false)
+  private String title;
 
-    @ManyToOne(optional = false,fetch = FetchType.EAGER)
-    @JoinColumn(name = "archivetype_id")
-    private ArchiveType archiveTypeID;
+  @Column(name = "memo")
+  private String memo;
 
-    @OneToMany(mappedBy = "ledger")
-    List<TagLedgerRelation> relation;
+  @ManyToOne(optional = false, fetch = FetchType.EAGER)
+  @JoinColumn(name = "archivetype_id")
+  private ArchiveType archiveTypeID;
 
-    @Column(name="is_excluded",nullable = false,columnDefinition = "TINYINT",length = 1)
-    @Convert(converter = ExcludedAttributeConverter.class)
-    @ColumnDefault("0")
-    private Boolean isExcluded;
+  @OneToMany(mappedBy = "ledger")
+  List<TagLedgerRelation> relation;
+
+  @Column(name = "is_excluded", nullable = false, columnDefinition = "TINYINT", length = 1)
+  @Convert(converter = ExcludedAttributeConverter.class)
+  @ColumnDefault("0")
+  private Boolean isExcluded;
 
 }

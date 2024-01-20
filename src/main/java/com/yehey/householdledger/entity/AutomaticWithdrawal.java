@@ -17,32 +17,33 @@ import java.util.Set;
 @Table(name = "automatic_withdrawal")
 @Builder
 public class AutomaticWithdrawal {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="withdrawal_id")
-    private Long withdrawalID;
 
-    @Column(name = "cycle",nullable = false)
-    private String cycle;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "withdrawal_id")
+  private Long withdrawalID;
 
-    @Column(name="amount",nullable = false)
-    private Long amount;
+  @Column(name = "cycle", nullable = false)
+  private String cycle;
 
-    @Column(name = "title",nullable = false)
-    private String title;
+  @Column(name = "amount", nullable = false)
+  private Long amount;
 
-    @ManyToOne(optional = false,fetch = FetchType.EAGER)
-    @JoinColumn(name = "archivetype_id")
-    private ArchiveType archiveTypeID;
+  @Column(name = "title", nullable = false)
+  private String title;
 
-    @Column(name="memo")
-    private String memo;
+  @ManyToOne(optional = false, fetch = FetchType.EAGER)
+  @JoinColumn(name = "archivetype_id")
+  private ArchiveType archiveTypeID;
 
-    @Column(name="is_excluded",nullable = false,columnDefinition = "TINYINT",length = 1)
-    @Convert(converter = ExcludedAttributeConverter.class)
-    @ColumnDefault("0")
-    private Boolean isExcluded;
+  @Column(name = "memo")
+  private String memo;
 
-    @OneToMany(mappedBy = "withdrawal")
-    List<WithdrawalTagRelation> relation;
+  @Column(name = "is_excluded", nullable = false, columnDefinition = "TINYINT", length = 1)
+  @Convert(converter = ExcludedAttributeConverter.class)
+  @ColumnDefault("0")
+  private Boolean isExcluded;
+
+  @OneToMany(mappedBy = "withdrawal")
+  List<WithdrawalTagRelation> relation;
 }

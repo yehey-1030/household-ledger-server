@@ -12,17 +12,18 @@ import lombok.*;
 @Table(name = "withdrawal_tag_relation")
 @Builder
 public class WithdrawalTagRelation {
-    @EmbeddedId
-    private WithdrawalRelationKey withdrawalRelationKey;
 
-    @MapsId("tagID")
-    @ManyToOne
-    @JoinColumn(name = "tag_id")
-    private Tag tag;
+  @EmbeddedId
+  private WithdrawalRelationKey withdrawalRelationKey;
 
-    @MapsId("withdrawalID")
-    @ManyToOne
-    @JoinColumn(name = "withdrawal_id")
-    private AutomaticWithdrawal withdrawal;
+  @MapsId("tagID")
+  @ManyToOne
+  @JoinColumn(name = "tag_id")
+  private Tag tag;
+
+  @MapsId("withdrawalID")
+  @ManyToOne
+  @JoinColumn(name = "withdrawal_id")
+  private AutomaticWithdrawal withdrawal;
 
 }

@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class PostTagRequestDTO {
-    private Long archiveTypeID;
-    private String name;
-    private Long parentID;
+
+  private Long archiveTypeID;
+  private String name;
+  private Long parentID;
 }

@@ -13,14 +13,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ArchiveTypeService {
-    private final ArchiveTypeDAO dao;
-    private final ArchiveTypeRepository archiveTypeRepository;
 
-    public ArchiveTypeDTO.CreateType CreateType(ArchiveTypeDTO.CreateType dto){
-        return this.dao.CreateType(dto.ToEntity()).toCreateDTO();
-    }
+  private final ArchiveTypeDAO dao;
+  private final ArchiveTypeRepository archiveTypeRepository;
 
-    public List<ArchiveType> getAllType(){
-        return archiveTypeRepository.findAll();
-    }
+  public ArchiveTypeDTO.CreateType CreateType(ArchiveTypeDTO.CreateType dto) {
+    return this.dao.CreateType(dto.ToEntity()).toCreateDTO();
+  }
+
+  public List<ArchiveType> getAllType() {
+    return archiveTypeRepository.findAll();
+  }
 }

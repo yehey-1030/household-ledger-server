@@ -8,8 +8,9 @@ import lombok.Setter;
 @Setter
 @Builder
 public class TagResponseDTO {
-    private Long tagID;
-    private Long parentID;
-    private Long archiveTypeID;
-    private String name;
+
+  private Long tagID;
+  private Long parentID;
+  private Long archiveTypeID;
+  private String name;
 }

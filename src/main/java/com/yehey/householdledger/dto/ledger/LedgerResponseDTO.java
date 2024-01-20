@@ -11,12 +11,13 @@ import java.util.List;
 @Getter
 @Builder
 public class LedgerResponseDTO {
-    private Long ledgerID;
-    private String title;
-    private LocalDate date;
-    private Long amount;
-    private String memo;
-    private ArchiveType archiveType;
-    private List<TagResponseDTO> tagList;
-    private Boolean isExcluded;
+
+  private Long ledgerID;
+  private String title;
+  private LocalDate date;
+  private Long amount;
+  private String memo;
+  private ArchiveType archiveType;
+  private List<TagResponseDTO> tagList;
+  private Boolean isExcluded;
 }

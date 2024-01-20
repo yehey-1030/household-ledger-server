@@ -9,14 +9,15 @@ import com.yehey.householdledger.entity.Tag;
 @Service
 @Slf4j
 public class TagDAO {
-    private final TagRepository repository;
 
-    @Autowired
-    public TagDAO(TagRepository repository) {
-        this.repository = repository;
-    }
+  private final TagRepository repository;
 
-    public Tag createTag(Tag entity){
-        return this.repository.save(entity);
-    }
+  @Autowired
+  public TagDAO(TagRepository repository) {
+    this.repository = repository;
+  }
+
+  public Tag createTag(Tag entity) {
+    return this.repository.save(entity);
+  }
 }

@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode
 public class WithdrawalRelationKey implements Serializable {
-    private Long tagID;
-    private Long withdrawalID;
+
+  private Long tagID;
+  private Long withdrawalID;
 }

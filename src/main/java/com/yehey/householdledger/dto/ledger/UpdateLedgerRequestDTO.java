@@ -9,6 +9,7 @@ import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
-public class UpdateLedgerRequestDTO extends PostLedgerRequestDTO{
-    private Long ledgerID;
+public class UpdateLedgerRequestDTO extends PostLedgerRequestDTO {
+
+  private Long ledgerID;
 }

@@ -31,7 +31,7 @@ public class AutomaticWithdrawal {
     @Column(name = "title",nullable = false)
     private String title;
 
-    @ManyToOne(optional = false,fetch = FetchType.LAZY)
+    @ManyToOne(optional = false,fetch = FetchType.EAGER)
     @JoinColumn(name = "archivetype_id")
     private ArchiveType archiveTypeID;
 
